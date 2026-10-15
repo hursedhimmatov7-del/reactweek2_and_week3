@@ -51,6 +51,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
 
 
 const App = () => {
@@ -129,6 +130,9 @@ const App = () => {
         ))
         setopen(false)
     }
+    function chekfunc(id){
+    setData((prev)=> prev.map((elem)=> (elem.id == id? {...elem, status : !elem.status}:elem)))
+    }
    
 
 let filteredData = data
@@ -149,6 +153,7 @@ let filteredData = data
  
     return (
     <div className='m-20 w-325'>
+        
 <div className='w-full flex items-center justify-between'>
     <div className='flex items-center gap-2'>
     <Select  onValueChange={sortset}>
@@ -277,7 +282,12 @@ let filteredData = data
               <TableRow key={elem.id}>
           <TableCell className="font-medium">{elem.name}</TableCell>
           <TableCell>{elem.price}</TableCell>
-          <TableCell>{elem.status ? "in" : 'out'}</TableCell>
+          <TableCell><div className='flex items-center gap-1'>{elem.status ? "in" : 'out'} 
+      <Field orientation="horizontal">
+        <Checkbox onCheckedChange={()=> chekfunc(elem.id)} checked = {elem.status}  id="terms-checkbox-basic" name="terms-checkbox-basic" />
+      
+      </Field>
+   </div></TableCell>
                <Tooltip>
       <TooltipTrigger render={ <TableCell className="text-right">
             <DropdownMenu>
