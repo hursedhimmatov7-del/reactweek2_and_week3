@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import Dashboard from './Dashboard/Dashboard';
 import Birja from './pages/Birja';
-import Worki from './pages/Worki';
+const Worki = lazy(()=>import('./pages/Worki'))
 import Conkursi from './pages/Conkursi';
 import Makeworks from './pages/Makeworks';
 import Makeorder from './pages/Makeorder';
@@ -22,7 +22,7 @@ const App = () => {
   },
    {
             path:'worki' ,
-            element:<Worki/>
+            element:<Suspense fallback={<h1 className='text-center my-40 text-9xl font-bold'>loading....</h1>}><Worki/></Suspense>
         },
            {
             path:'Conkursi' ,
