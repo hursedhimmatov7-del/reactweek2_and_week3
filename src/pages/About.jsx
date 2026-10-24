@@ -5,6 +5,9 @@ import { Link } from 'react-router'
 const About = () => {
     const api = 'https://to-dos-api.softclub.tj'
     const [data , setdata] = useState([])
+    const [index , setindex] = useState({index:0})
+    const [search , setsearch] = useState('')
+    const [sort , setsort] = useState('all')
 
 
     async function chekFunc(id) {
@@ -27,7 +30,22 @@ const About = () => {
     }
     useEffect(()=>{
      getFetch()
-    } )
+    } , [] )
+
+ async function dltUser(id) {
+    try {
+        await axios.delete(`${api}/api/to-dos?id=${id}`)
+        getFetch()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+    const filtered = data.filter((elem) => elem.name.toLowerCase().includes(search.trim().toLowerCase())).filter((elem)=> {
+        if(sort == 'true') return elem.isCompleted == true
+       else if(sort == 'false') return elem.isCompleted == false
+       return true
+    })
   return (
     <div>
      <section className='max-w-400 m-auto bg-[#FEDAD5]'>
@@ -146,21 +164,32 @@ with Createx <br /> Online Courses</p>
             <div className='w-full flex items-center justify-between'>
                 <p className='text-3xl font-semibold'>Meet our team</p>
                 <div className='flex items-center gap-5'>
-                    <button className='p-[10px_15px] rounded-xl border-2 text-[#FF3F3A] border-[#FF3F3A]'>prev</button>
+                    <button className='p-[10px_15px] rounded-xl border-2 text-[#FF3F3A] '>prev</button>
                     <button className='p-[10px_15px] rounded-xl bg-[#FF3F3A] text-white'>next</button>
                 </div>
                  </div>
+                 <div className='w-full flex items-start gap-4'>
+                    <input onChange={(e)=>setsearch(e.target.value)} type="search" placeholder='search'  className='p-3 border-2  border-[#FF3F3A] text-[#FF3F3A] ' />
+                    <select onChange={(e)=>setsort(e.target.value)} className='p-3 border-2  border-[#FF3F3A] text-[#FF3F3A] ' >
+                        <option value="all">all</option>
+                        <option value="true">online</option>
+                        <option value="false">offline</option>
+                    </select>
+                    <button className='p-3 border-2  border-[#FF3F3A] text-[#FF3F3A] '>adduser</button>
+                 </div>
+                 
                  <div className='w-full flex flex-wrap gap-4 m'>
                     {
-                   data.map((elem) => {
+                   filtered.map((elem) => {
                     return <div key={elem.id} className='w-[24%] border-2 text-xl font-semibold border-[#FF3F3A] p-5 rounded-md flex flex-col items-center gap-6'>
-                        <p>{elem.name}</p>0
+                      <img className='w-15 h-15 rounded-[50%] relative'  src={index.id == elem.id ? api + "/images/" + elem?.images[index.index]?.imageName : api + "/images/" + elem?.images[0]?.imageName  } alt="" />
+                        <p>{elem.name}</p>
                         <div className='flex items-center gap-2'>
                             <p>{elem.isCompleted ? 'online' : 'offline'}</p>
                             <input type="checkbox" checked = {elem.isCompleted} onChange={()=>chekFunc(elem.id)} />
                         </div>
                         <div className='flex items-center gap-3'>
-                            <button className='p-[6px_12px] border-2 border-[#FF3F3A] text-[#FF3F3A] rounded-md'>delete</button>
+                            <button onClick={()=> dltUser(elem.id)} className='p-[6px_12px] border-2 border-[#FF3F3A] text-[#FF3F3A] rounded-md'>delete</button>
                             <button className='p-[6px_12px] border-2 border-[#FF3F3A] text-[#FF3F3A] rounded-md'>edit</button>
                            <Link to={'about/' + elem.id} className='p-[6px_12px] border-2 border-[#FF3F3A] text-[#FF3F3A] rounded-md'> info</Link>
                         </div>
