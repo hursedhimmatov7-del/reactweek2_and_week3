@@ -6,6 +6,7 @@ const About = () => {
     const api = 'https://to-dos-api.softclub.tj'
     const [data , setdata] = useState([])
 
+
     async function chekFunc(id) {
         try {
             await axios.put(`${api}/completed?id=${id}`)

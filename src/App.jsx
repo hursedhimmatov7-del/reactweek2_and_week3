@@ -18,16 +18,16 @@ const router = createBrowserRouter([
        index : true ,
        element:<About/>,
       },
+        {
+    path:"about/:id",
+    element:<User/>
+  },
       {
         path:"courses" ,
         element:<Courses/>
       }
     ]
   },
-  {
-    path:"about/:id",
-    element:<User/>
-  }
 ]);
 
   return (
