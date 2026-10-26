@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 
 const About = () => {
@@ -8,6 +8,20 @@ const About = () => {
     const [index , setindex] = useState({index:0})
     const [search , setsearch] = useState('')
     const [sort , setsort] = useState('all')
+
+    const addRef = useRef(null)
+    const editRef = useRef(null)
+    const infoRef = useRef(null)
+
+    const [addname , setaddname] = useState('')
+    const [adddesc , setadddesc] = useState('')
+
+    const [editid , seteditid] = useState(null)
+    const [editname , seteditname] = useState('')
+    const [editdesc , seteditdesc] = useState('')
+
+    const [infoname , setinfoname] = useState('')
+    const [infodesc , setinfodesc] = useState('')
 
 
     async function chekFunc(id) {
@@ -41,6 +55,50 @@ const About = () => {
     }
 }
 
+    function addClose() {
+        addRef.current.close()
+        setaddname('')
+        setadddesc('')
+    }
+    async function addSave() {
+        let newUser = new FormData()
+        newUser.append("name", addname)
+        newUser.append("description", adddesc)
+        try {
+            await axios.post(`${api}/api/to-dos`, newUser)
+            getFetch()
+            addClose()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function editShow(elem) {
+        seteditid(elem.id)
+        seteditname(elem.name)
+        seteditdesc(elem.description)
+        editRef.current.showModal()
+    }
+    async function editSave() {
+        try {
+            await axios.put(`${api}/api/to-dos`, {
+                id: editid,
+                name: editname,
+                description: editdesc
+            })
+            getFetch()
+            editRef.current.close()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function infoShow(elem) {
+        setinfoname(elem.name)
+        setinfodesc(elem.description)
+        infoRef.current.showModal()
+    }
+
     const filtered = data.filter((elem) => elem.name.toLowerCase().includes(search.trim().toLowerCase())).filter((elem)=> {
         if(sort == 'true') return elem.isCompleted == true
        else if(sort == 'false') return elem.isCompleted == false
@@ -48,6 +106,33 @@ const About = () => {
     })
   return (
     <div>
+     <dialog ref={addRef}>
+        <h2>Add user</h2>
+        <input type="text" placeholder="name" value={addname} onChange={(e) => setaddname(e.target.value)} />
+        <input type="text" placeholder="description" value={adddesc} onChange={(e) => setadddesc(e.target.value)} />
+        <div>
+            <button onClick={addClose}>Cancel</button>
+            <button onClick={addSave}>Save</button>
+        </div>
+     </dialog>
+
+     <dialog ref={editRef}>
+        <h2>Edit user</h2>
+        <input type="text" value={editname} onChange={(e) => seteditname(e.target.value)} />
+        <input type="text" value={editdesc} onChange={(e) => seteditdesc(e.target.value)} />
+        <div>
+            <button onClick={() => editRef.current.close()}>Cancel</button>
+            <button onClick={editSave}>Save</button>
+        </div>
+     </dialog>
+
+     <dialog ref={infoRef}>
+        <h2>Info</h2>
+        <p>name: {infoname}</p>
+        <p>description: {infodesc}</p>
+        <button onClick={() => infoRef.current.close()}>Close</button>
+     </dialog>
+
      <section className='max-w-400 m-auto bg-[#FEDAD5]'>
             <div className='w-325 m-auto py-20 flex items-center justify-between'>
                 <div className='flex items-start flex-col gap-8'>
@@ -175,7 +260,7 @@ with Createx <br /> Online Courses</p>
                         <option value="true">online</option>
                         <option value="false">offline</option>
                     </select>
-                    <button className='p-3 border-2  border-[#FF3F3A] text-[#FF3F3A] '>adduser</button>
+                    <button onClick={() => addRef.current.showModal()} className='p-3 border-2  border-[#FF3F3A] text-[#FF3F3A] '>adduser</button>
                  </div>
                  
                  <div className='w-full flex flex-wrap gap-4 m'>
@@ -190,8 +275,8 @@ with Createx <br /> Online Courses</p>
                         </div>
                         <div className='flex items-center gap-3'>
                             <button onClick={()=> dltUser(elem.id)} className='p-[6px_12px] border-2 border-[#FF3F3A] text-[#FF3F3A] rounded-md'>delete</button>
-                            <button className='p-[6px_12px] border-2 border-[#FF3F3A] text-[#FF3F3A] rounded-md'>edit</button>
-                           <Link to={'about/' + elem.id} className='p-[6px_12px] border-2 border-[#FF3F3A] text-[#FF3F3A] rounded-md'> info</Link>
+                            <button onClick={() => editShow(elem)} className='p-[6px_12px] border-2 border-[#FF3F3A] text-[#FF3F3A] rounded-md'>edit</button>
+                            <button onClick={() => infoShow(elem)} className='p-[6px_12px] border-2 border-[#FF3F3A] text-[#FF3F3A] rounded-md'>info</button>
                         </div>
                     </div>
                    })
@@ -254,7 +339,7 @@ September 4, 2020
         <div className='w-325 m-auto text-white py-20 flex items-start justify-between'>
             <div className='flex w-[30%] text-white items-start gap-4 flex-col'>
                 <img src="../../public/logo.png" alt="" />
-                <p>Createx Online School is a leader in online studying. We have lots of courses and programs from the main market experts. We provide relevant approaches to online learning, internships and employment in the largest companies in the country. </p>
+                <p>Createx Online School is a leader in online studying. We have lots of courses and programs from the main market experts. We provide relevant approaches to online learning, internships and employment in the largest companies in the country. </p>
                 <img src="../../public/socials.png" alt="" />
             </div>
                  <div className='flex flex-col items-start gap-3'>
