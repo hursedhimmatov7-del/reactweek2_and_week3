@@ -33,6 +33,8 @@ const Dash = () => {
           <Link to={'/'}>Home</Link>
           <Link to={'/About'}>About</Link>
           <Link to={'/Contacts'}>Contacts</Link>
+          <Link to={'/Catalog'}>Catalog</Link>
+          <Link to={'/Product'}>Product</Link>
 
           <button onClick={logout}>Выйти</button>
         </header>

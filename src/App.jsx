@@ -7,6 +7,8 @@ import About from './pages/About'
 import Contacts from './pages/Contacts'
 import Login from './Login/Login'
 import Authflow from './Authflow'
+import Catalog from './pages/Catalog'
+import Product from './pages/Product'
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,8 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "About", element: <About /> },
       { path: "Contacts", element: <Contacts /> },
+      {path:"Catalog" , element:<Catalog/>} ,
+      {path:"Product" , element:<Product/>}
     ],
   },
   {
