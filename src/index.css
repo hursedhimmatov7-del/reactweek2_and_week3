@@ -1,10 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+@import "tailwindcss";
+
+/* Цвета темы доступны в Tailwind: bg-panel, border-fg, text-pink и т.д. */
+@theme inline {
+  --color-ink: var(--ink);
+  --color-panel: var(--panel);
+  --color-fg: var(--text);
+  --color-pink: var(--pink);
+  --color-cyan: var(--cyan);
+  --color-yellow: var(--yellow);
+}
 
 :root {
   --ink: #120e26; --panel: #1e1740; --pink: #ff8fc7;
   --cyan: #6de3ff; --yellow: #ffe066; --text: #f3eeff; --muted: #b0a6d9;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
   background: var(--ink) radial-gradient(#ffffff14 1.5px, transparent 1.5px) 0 0 / 18px 18px; /* тон-сетка как в манге */
@@ -29,7 +39,7 @@ a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
 .stitle span { color: var(--cyan); font-weight: 700; }
 
 /* Кнопки */
-.btn { display: inline-block; padding: 12px 28px; margin: 14px 14px 0 0; background: var(--yellow); color: var(--ink);
+.btn { display: inline-block; padding: 12px 28px; margin: 14px 14px 0 0; background: var(--yellow); color: #120e26;
   font-weight: 700; text-decoration: none; border: 3px solid var(--text); box-shadow: 5px 5px 0 var(--pink);
   transition: transform .15s, box-shadow .15s; }
 .btn:hover { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--pink); }
@@ -48,10 +58,10 @@ a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Обо мне */
-.bubble { position: relative; max-width: 640px; padding: 24px 28px; background: #fff; color: var(--ink);
-  border: 3px solid var(--ink); border-radius: 28px; box-shadow: 6px 6px 0 var(--cyan); }
+.bubble { position: relative; max-width: 640px; padding: 24px 28px; background: #fff; color: #120e26;
+  border: 3px solid #120e26; border-radius: 28px; box-shadow: 6px 6px 0 var(--cyan); }
 .bubble::after { content: ''; position: absolute; left: 44px; bottom: -15px; width: 26px; height: 26px; background: #fff;
-  border: 3px solid var(--ink); border-top: 0; border-left: 0; transform: rotate(45deg); }
+  border: 3px solid #120e26; border-top: 0; border-left: 0; transform: rotate(45deg); }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 28px; margin-top: 56px; }
 .stats .panel { text-align: center; padding: 18px; box-shadow: 6px 6px 0 var(--cyan); }
 .stats b { display: block; font: 400 2rem 'Dela Gothic One', sans-serif; color: var(--yellow); }
@@ -62,7 +72,7 @@ a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
 .bar i { display: block; height: 100%; background: var(--cyan); }
 
 /* Проекты */
-.card h3 { color: var(--yellow); margin-bottom: 8px; }
+.card h3 { font-size: 1.4rem; color: var(--yellow); margin-bottom: 8px; }
 .card p { color: var(--muted); }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
 .tags span { padding: 0 12px; border: 2px solid var(--cyan); color: var(--cyan); font-size: .9rem; }
@@ -70,42 +80,7 @@ a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
 
 .footer { position: relative; z-index: 2; text-align: center; color: var(--muted); padding: 60px 0 40px; }
 
-/* Сакура */
-.sakura { position: fixed; inset: 0; pointer-events: none; z-index: 5; overflow: hidden; }
-.sakura i { position: absolute; top: -30px; background: #ffb7e1; border-radius: 150% 0 150% 0; opacity: .75; animation: fall linear infinite; }
-@keyframes fall { to { transform: translate(120px, 110vh) rotate(720deg); } }
-
-@media (max-width: 640px) { .nav a { margin-left: 12px; font-size: .9rem; } }
-@media (prefers-reduced-motion: reduce) {
-  .sakura { display: none; } .cursor { animation: none; } html { scroll-behavior: auto; }
-}
-
-@import "tailwindcss";
-
-@theme inline {
-  --color-ink: var(--ink);
-  --color-panel: var(--panel);
-  --color-fg: var(--text);
-  --color-pink: var(--pink);
-  --color-cyan: var(--cyan);
-  --color-yellow: var(--yellow);
-}
-
-/* ===== Светлая тема ===== */
-html.light {
-  --ink: #fff6fb; --panel: #ffffff; --text: #2a2147; --muted: #6b5f94;
-  --pink: #d6246e; --cyan: #0e7490; --yellow: #ffd23f;
-}
-html.light body { background: var(--ink) radial-gradient(#2a214718 1.5px, transparent 1.5px) 0 0 / 18px 18px; }
-html.light .avatar { background: repeating-conic-gradient(#fff 0 6deg, #ffe3f0 6deg 12deg); }
-html.light .stats b, html.light .card h3, html.light .role { color: #b3125f; }
-html.light .btn.alt { background: #7ee7ff; }
-html.light .nav a:hover { color: var(--pink); }
-.btn, .bubble { color: #120e26; }
-body, .panel, .nav, .bar { transition: background-color .3s, color .3s, border-color .3s; }
-.card h3 { font-size: 1.4rem; }
-
-/* ===== Галерея (Swiper) ===== */
+/* Галерея (Swiper) */
 .gallery {
   --swiper-theme-color: var(--pink);
   --swiper-navigation-color: var(--yellow);
@@ -115,3 +90,25 @@ body, .panel, .nav, .bar { transition: background-color .3s, color .3s, border-c
 .gallery .swiper-slide { width: min(300px, 70vw); }
 .gallery img { transition: filter .4s; }
 .gallery .swiper-slide:not(.swiper-slide-active) img { filter: saturate(.6) brightness(.75); }
+
+/* Сакура */
+.sakura { position: fixed; inset: 0; pointer-events: none; z-index: 5; overflow: hidden; }
+.sakura i { position: absolute; top: -30px; background: #ffb7e1; border-radius: 150% 0 150% 0; opacity: .75; animation: fall linear infinite; }
+@keyframes fall { to { transform: translate(120px, 110vh) rotate(720deg); } }
+
+/* Светлая тема: переопределяем переменные и пару мест */
+html.light {
+  --ink: #fff6fb; --panel: #ffffff; --text: #2a2147; --muted: #6b5f94;
+  --pink: #d6246e; --cyan: #0e7490; --yellow: #ffd23f;
+}
+html.light body { background: var(--ink) radial-gradient(#2a214718 1.5px, transparent 1.5px) 0 0 / 18px 18px; }
+html.light .avatar { background: repeating-conic-gradient(#fff 0 6deg, #ffe3f0 6deg 12deg); }
+html.light .stats b, html.light .card h3, html.light .role { color: #b3125f; }
+html.light .btn.alt { background: #7ee7ff; }
+html.light .nav a:hover { color: var(--pink); }
+body, .panel, .nav, .bar { transition: background-color .3s, color .3s, border-color .3s; }
+
+@media (max-width: 640px) { .nav a { margin-left: 12px; font-size: .9rem; } }
+@media (prefers-reduced-motion: reduce) {
+  .sakura { display: none; } .cursor { animation: none; } html { scroll-behavior: auto; }
+}
