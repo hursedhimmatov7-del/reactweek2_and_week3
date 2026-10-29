@@ -79,3 +79,39 @@ a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   .sakura { display: none; } .cursor { animation: none; } html { scroll-behavior: auto; }
 }
+
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-panel: var(--panel);
+  --color-fg: var(--text);
+  --color-pink: var(--pink);
+  --color-cyan: var(--cyan);
+  --color-yellow: var(--yellow);
+}
+
+/* ===== Светлая тема ===== */
+html.light {
+  --ink: #fff6fb; --panel: #ffffff; --text: #2a2147; --muted: #6b5f94;
+  --pink: #d6246e; --cyan: #0e7490; --yellow: #ffd23f;
+}
+html.light body { background: var(--ink) radial-gradient(#2a214718 1.5px, transparent 1.5px) 0 0 / 18px 18px; }
+html.light .avatar { background: repeating-conic-gradient(#fff 0 6deg, #ffe3f0 6deg 12deg); }
+html.light .stats b, html.light .card h3, html.light .role { color: #b3125f; }
+html.light .btn.alt { background: #7ee7ff; }
+html.light .nav a:hover { color: var(--pink); }
+.btn, .bubble { color: #120e26; }
+body, .panel, .nav, .bar { transition: background-color .3s, color .3s, border-color .3s; }
+.card h3 { font-size: 1.4rem; }
+
+/* ===== Галерея (Swiper) ===== */
+.gallery {
+  --swiper-theme-color: var(--pink);
+  --swiper-navigation-color: var(--yellow);
+  --swiper-pagination-bullet-inactive-color: var(--text);
+  padding: 16px 16px 64px;
+}
+.gallery .swiper-slide { width: min(300px, 70vw); }
+.gallery img { transition: filter .4s; }
+.gallery .swiper-slide:not(.swiper-slide-active) img { filter: saturate(.6) brightness(.75); }
