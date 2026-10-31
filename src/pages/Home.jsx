@@ -1,66 +1,17 @@
 import { api } from '@/Api'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router'
 
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-]
+
 
 
 const Home = () => {
     const token = localStorage.getItem('token')
     let [data , setdata] = useState([])
+    const [editingUser, setEditingUser] = useState(null)
+    const addmodal = useRef()
+    const editmodal = useRef()
     async function fetch() {
         try {
             let {data} = await axios.get(api + '/users' , {
@@ -75,38 +26,65 @@ const Home = () => {
         fetch()
     }, [])
 
+ async function dltUser(id) {
+    try {
+      await axios.delete(api + '/users/' + id , {
+        headers:{Authorization:`Bearer ${token}`}
+      })
+      fetch()
+    } catch (error) {
+        console.log(error)
+    }
+ }
+ const addUser = async(e) => {
+    e.preventDefault()
+    let obj = {
+        name : e.target.name.value ,
+        email : e.target.email.value ,
+        password : e.target.password.value ,
+        role : e.target.role.value ,
+        city : e.target.city.value 
+    }
+    try {
+        await axios.post(api + '/users' , obj, {
+            headers:{Authorization:`Bearer ${token}`}
+        })
+        fetch()
+        addmodal.current.close()
+    } catch (error) {
+        console.log(error)
+    }
+ }
+ function editShow(elem){
+    setEditingUser(elem)
+    editmodal.current.showModal()
+ }
 
+ const editUser = async(e) => {
+    e.preventDefault()
+    let obj = {
+        name : e.target.name.value ,
+        email : e.target.email.value ,
+        password : e.target.password.value ,
+        role : e.target.role.value ,
+        city : e.target.city.value 
+    }
+    try {
+        await axios.put(api + '/users/'+ editingUser.id , obj, {
+            headers:{Authorization:`Bearer ${token}`}
+        })
+        fetch()
+        editmodal.current.close()
+        addmodal.current.close()
+    } catch (error) {
+        console.log(error)
+    }
+ }
 
     
   return (
     <div>
-          <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+        <button onClick={()=>addmodal.current.showModal()} className='p-2 border border-gray-700 rounded-xl'>Adduser+</button>
      <div className='w-full my-15 flex flex-wrap gap-6 border-2 border-gray-700 rounded-2xl p-10'>
          {
         data.map((elem)=>{
@@ -115,11 +93,37 @@ const Home = () => {
                 <h1>{elem.email}</h1>
                 <h1>{elem.role}</h1>
                 <h1>{elem.city}</h1>
+                <div className='flex items-center gap-4'>
+                    <button onClick={()=>dltUser(elem.id)}>Delete</button>
+                    <button onClick={()=>editShow(elem)}>Edit</button>
+                    <Link to={`Home/${elem.id}`}>Info</Link>
+                </div>
             </div>
         })
       }
      </div>
-    </div>
+
+  <dialog className='m-auto'  ref={addmodal}>
+        <form onSubmit={addUser} className='flex flex-col' >
+            <input  type="text" placeholder='name...' name='name' />
+            <input  type="email" placeholder='email...' name='email' />
+            <input  type="text" placeholder='password...' name='password' />
+            <input  type="text" placeholder='role...' name='role' />
+            <input  type="text" placeholder='city...' name='city' />
+            <button type='submit'>Save</button>
+        </form>
+     </dialog>
+   <dialog ref={editmodal}>
+       <form onSubmit={editUser} key={editingUser?.id}>
+         <input type="text" placeholder='name...' name='name' defaultValue={editingUser?.name}/>
+        <input type="text" placeholder='email...' name='email' defaultValue={editingUser?.email}/>
+        <input type="text" placeholder='password...' name='password' defaultValue={editingUser?.password}/>
+        <input type="text" placeholder='role...' name='role' defaultValue={editingUser?.role}/>
+        <input type="text" placeholder='city...' name='city' defaultValue={editingUser?.city}/>
+        <button type='submit'>Edit</button>
+       </form>
+      </dialog>
+   </div>
   )
 }
 

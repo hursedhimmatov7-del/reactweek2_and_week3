@@ -4,10 +4,11 @@ import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import Dashboard from './Dashboard';
 import Home from './pages/Home';
-import About from './pages/About';
-import Contacts from './pages/Contacts';
 import Login from './pages/Login';
 import Auth from './Auth';
+import UserId from './pages/UserId';
+import Product from './pages/Product';
+import About from './pages/About';
 
 
 const App = () => {
@@ -21,11 +22,15 @@ const App = () => {
         element:<Home/>
       },
        {
-        path:"About",
-        element:<About/>
+   path:'Home/:id' ,
+   element:<UserId></UserId>
+  },
+       {
+        path:"Product",
+        element:<Product/>
       },
-      { path:"Contacts" ,
-        element:<Contacts/>
+      { path:"About" ,
+        element:<About/>
       },
     ]
   },

@@ -28,8 +28,8 @@ const Dashboard = () => {
        <header className='w-325 m-auto flex items-center justify-between py-3'>
         <div className='flex items-center gap-8'>
         <Link to={'/'}>Home</Link>
+        <Link to={'Product'}>Product</Link>
         <Link to={'About'}>About</Link>
-        <Link to={'Contacts'}>Contacts</Link>
         </div>
         <button onClick={logout}>Log out</button>
        </header>
