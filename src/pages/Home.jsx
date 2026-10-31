@@ -2,25 +2,60 @@ import { api } from '@/Api'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-
-import { MoreHorizontalIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
+const invoices = [
+  {
+    invoice: "INV001",
+    paymentStatus: "Paid",
+    totalAmount: "$250.00",
+    paymentMethod: "Credit Card",
+  },
+  {
+    invoice: "INV002",
+    paymentStatus: "Pending",
+    totalAmount: "$150.00",
+    paymentMethod: "PayPal",
+  },
+  {
+    invoice: "INV003",
+    paymentStatus: "Unpaid",
+    totalAmount: "$350.00",
+    paymentMethod: "Bank Transfer",
+  },
+  {
+    invoice: "INV004",
+    paymentStatus: "Paid",
+    totalAmount: "$450.00",
+    paymentMethod: "Credit Card",
+  },
+  {
+    invoice: "INV005",
+    paymentStatus: "Paid",
+    totalAmount: "$550.00",
+    paymentMethod: "PayPal",
+  },
+  {
+    invoice: "INV006",
+    paymentStatus: "Pending",
+    totalAmount: "$200.00",
+    paymentMethod: "Bank Transfer",
+  },
+  {
+    invoice: "INV007",
+    paymentStatus: "Unpaid",
+    totalAmount: "$300.00",
+    paymentMethod: "Credit Card",
+  },
+]
 
 
 const Home = () => {
@@ -45,72 +80,33 @@ const Home = () => {
     
   return (
     <div>
-
-
-       <Table>
+          <Table>
+      <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Product</TableHead>
-          <TableHead>Price</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
+          <TableHead className="w-[100px]">Invoice</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Method</TableHead>
+          <TableHead className="text-right">Amount</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="font-medium">Wireless Mouse</TableCell>
-          <TableCell>$29.99</TableCell>
-          <TableCell className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="size-8"><MoreHorizontalIcon /><span className="sr-only">Open menu</span></Button>} />
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="font-medium">Mechanical Keyboard</TableCell>
-          <TableCell>$129.99</TableCell>
-          <TableCell className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="size-8"><MoreHorizontalIcon /><span className="sr-only">Open menu</span></Button>} />
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="font-medium">USB-C Hub</TableCell>
-          <TableCell>$49.99</TableCell>
-          <TableCell className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="size-8"><MoreHorizontalIcon /><span className="sr-only">Open menu</span></Button>} />
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </TableCell>
-        </TableRow>
+        {invoices.map((invoice) => (
+          <TableRow key={invoice.invoice}>
+            <TableCell className="font-medium">{invoice.invoice}</TableCell>
+            <TableCell>{invoice.paymentStatus}</TableCell>
+            <TableCell>{invoice.paymentMethod}</TableCell>
+            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+          </TableRow>
+        ))}
       </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={3}>Total</TableCell>
+          <TableCell className="text-right">$2,500.00</TableCell>
+        </TableRow>
+      </TableFooter>
     </Table>
-
-
      <div className='w-full my-15 flex flex-wrap gap-6 border-2 border-gray-700 rounded-2xl p-10'>
          {
         data.map((elem)=>{
