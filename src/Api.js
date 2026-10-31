@@ -1,0 +1,1 @@
+export const api = 'https://test-swagger-2ph6.onrender.com'
